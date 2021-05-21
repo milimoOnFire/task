@@ -5,7 +5,7 @@ import TasksListContainer from './containers/TasksListContainer';
 
 
 const App = () => {
-    const thereIstasks = false;
+    const thereIstasks = true;
     return thereIstasks ? <TasksListContainer /> : <CreateTaskContainer />
 };
 
