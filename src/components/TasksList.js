@@ -1,7 +1,9 @@
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from '@material-ui/core';
+import {Button, Card, CardActionArea, CardActions, CardContent, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateTask} from '../redux/tasks/actions';
+import {size} from '../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
     btns: {
@@ -26,70 +28,75 @@ const useStyles = makeStyles((theme) => ({
     card: {
         marginTop: theme.spacing(1),
         padding: theme.spacing(0),
-        width:'100%',
-        position:'relative'
+        width: '100%',
+        position: 'relative',
     },
     status: {
-        position:'absolute',
-        top:theme.spacing(2.2),
-        right:theme.spacing(2),
+        position: 'absolute',
+        top: theme.spacing(2.2),
+        right: theme.spacing(2),
         backgroundColor: theme.palette.warning.main,
-        width:'1.8rem',
-        height:'1.8rem',
-        borderRadius:'50%'
-    }
+        width: '1.8rem',
+        height: '1.8rem',
+        borderRadius: '50%',
+    },
 }));
 const TasksList = ({handleAction}) => {
     const classes = useStyles();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const {tasks} = useSelector(state => state.tasksReducers);
     const handleDone = (id) => {
-
-    }
+        const task = tasks.find(task=>task.id === Number(id));
+        dispatch(updateTask({...task,isDone:true},
+            () => {},
+        ));
+    };
     return (
-        <Card className={classes.card}>
-            <CardActionArea onClick={() => handleAction('SHOW',12)}>
-                <CardContent>
-                    <Typography
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
+        size(tasks) > 0 && tasks.map((task) => (
+            <Card className={classes.card}>
+                <CardActionArea onClick={() => handleAction('SHOW', task.id)}>
+                    <CardContent>
+                        <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="h2"
+                        >
+                            {task.title}
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                        >
+                            {task.description}
+                        </Typography>
+                        <div className={classes.status}></div>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions className={classes.btns}>
+                    <Button
+                        size="small"
+                        variant="default"
+                        color="default"
+                        className={classes.btnWarning}
+                        onClick={() => handleAction('EDIT', task.id)}
                     >
-                        Lizard
-                    </Typography>
-                    <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
+                        Edit Task
+                    </Button>
+                    <Button
+                        variant="default"
+                        color="primary"
+                        size="small"
+                        className={classes.btnSuccess}
+                        onClick={() => handleDone(task.id)}
                     >
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
-                    </Typography>
-                    <div className={classes.status}></div>
-                </CardContent>
-            </CardActionArea>
-            <CardActions className={classes.btns}>
-                <Button
-                    size="small"
-                    variant="default"
-                    color="default"
-                    className={classes.btnWarning}
-                    onClick={() => handleAction('EDIT',1)}
-                >
-                    Edit Task
-                </Button>
-                <Button
-                    variant="default"
-                    color="primary"
-                    size="small"
-                    className={classes.btnSuccess}
-                    onClick={() => handleDone(1)}
-                >
-                    Done Task
-                </Button>
-            </CardActions>
+                        Done Task
+                    </Button>
+                </CardActions>
 
-        </Card>
-    );
+            </Card>
+        )));
 };
+
 
 export default TasksList;

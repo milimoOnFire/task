@@ -5,7 +5,9 @@ import Modal from '@material-ui/core/Modal';
 import {makeStyles} from '@material-ui/core/styles';
 import {useFormik} from 'formik';
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
+import {addTask} from '../redux/tasks/actions';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -33,6 +35,7 @@ const validationSchema = yup.object({
 });
 const CreateTaskModal = ({open, handleClose}) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -43,7 +46,9 @@ const CreateTaskModal = ({open, handleClose}) => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values);
+            dispatch(addTask({...values, isDone: false},
+                () => {handleClose()},
+            ));
         },
     });
 

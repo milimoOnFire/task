@@ -2,10 +2,11 @@ import {ADD_TASK, UPDATE_TASK} from '../../constants/actionTypes';
 
 // Adds a task to tasks
 export const addTask = (task, callback) => (dispatch) => {
+    const uniqId = new Date().valueOf();
     dispatch({
         type: ADD_TASK,
         payload:
-            {task}
+            {task:{...task,id:uniqId}}
         ,
     });
     callback();

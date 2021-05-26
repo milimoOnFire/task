@@ -16,9 +16,12 @@ const useStyles = makeStyles((theme) => ({
         right: theme.spacing(2),
     },
 }));
-const TasksListContainer = (props) => {
+
+
+const TasksListContainer = () => {
     const classes = useStyles();
     const [taskId, setTaskId] = useState(null);
+
     const [open, setOpen] = useState(
         {
             'DoneTasks': false,
