@@ -1,4 +1,3 @@
-import './App.css';
 import {useSelector} from 'react-redux';
 import CreateTaskContainer from './containers/CreateTaskContainer';
 import TasksListContainer from './containers/TasksListContainer';
