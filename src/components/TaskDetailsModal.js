@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: theme.palette.background.paper,
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
-            width: '50vw',
+            minWidth: '440px',
         },
         buttonsContainer: {
             display: 'flex',
@@ -76,7 +76,7 @@ const TaskDetailsModal = ({open,openEdit, handleClose,taskId}) => {
             <Fade in={open}>
                 <Card className={classes.paper}>
                     <div className={classes.content}>
-                        <Status status={task.priority}/>
+                        <Status status={task?.priority}/>
                         <Typography component="h5" variant="h5">
                             {task?.title}
                         </Typography>
@@ -92,7 +92,7 @@ const TaskDetailsModal = ({open,openEdit, handleClose,taskId}) => {
                             className={classes.btn}
                             onClick={openEdit}
                         >
-                            Edit Tasks
+                            Edit Task
                         </Button>
                         <Button
                             variant="contained"
@@ -100,7 +100,7 @@ const TaskDetailsModal = ({open,openEdit, handleClose,taskId}) => {
                             className={classes.submit}
                             onClick={doneTask}
                         >
-                            Done Tasks
+                            Done Task
                         </Button>
                         <Button
                             variant="contained"

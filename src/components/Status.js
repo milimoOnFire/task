@@ -1,6 +1,6 @@
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
-
+//Init Styles
 const useStyles = makeStyles((theme) => ({
     status: {
         position: 'absolute',
@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '50%',
     },
 }));
+// Status component
 const Status = ({status}) => {
     const classes = useStyles();
     const state = {

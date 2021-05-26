@@ -32,18 +32,20 @@ export const updateTask = (task, callback) => (dispatch, getState) => {
 };
 
 // Delete an existing task by Id
-export const deleteTask = (taskId, callback) => (dispatch, getState) => {
-    const tasks = (getState().tasksReducers.tasks);
-    const updatedTasks = tasks.filter((storeTask => {
-        console.log(taskId,storeTask.id)
-        if (taskId !== storeTask.id) {
-            return storeTask;
-        }
-    }));
-    dispatch({
-        type: UPDATE_TASK,
-        payload:
-            {updatedTasks},
-    });
-    callback();
+export const deleteTask = (taskId, callback) => {
+    return (dispatch, getState) => {
+        const tasks = (getState().tasksReducers.tasks);
+        const updatedTasks = tasks.filter((storeTask => {
+            console.log(taskId, storeTask.id);
+            if (taskId !== storeTask.id) {
+                return storeTask;
+            }
+        }));
+        dispatch({
+            type: UPDATE_TASK,
+            payload:
+                {updatedTasks},
+        });
+        callback();
+    };
 };

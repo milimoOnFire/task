@@ -8,7 +8,7 @@ import EditTaskModal from '../components/EditTaskModal';
 import TaskDetailsModal from '../components/TaskDetailsModal';
 import TasksList from '../components/TasksList';
 import Layout from '../layouts/layout';
-
+// Init Styles
 const useStyles = makeStyles((theme) => ({
     fab: {
         position: 'fixed',
@@ -16,12 +16,13 @@ const useStyles = makeStyles((theme) => ({
         right: theme.spacing(2),
     },
 }));
-
-
+// Main Task List Container
 const TasksListContainer = () => {
+    // Get classes
     const classes = useStyles();
+    // Selected Task Id
     const [taskId, setTaskId] = useState(null);
-
+    // Modals Visibility States
     const [open, setOpen] = useState(
         {
             'DoneTasks': false,
@@ -30,7 +31,7 @@ const TasksListContainer = () => {
             'TaskDetails': false,
         },
     );
-
+    // Modal Visibility Actions
     const actions = {
         'SHOW': (id) => {
             setTaskId(id);
@@ -41,25 +42,23 @@ const TasksListContainer = () => {
             handleOpen('EditTask');
         },
     };
-
+    // Handle Modals Open Action
     const handleOpen = (modalName) => {
         const clonedOpen = {...open};
         clonedOpen[modalName] = true;
         setOpen(clonedOpen);
     };
-
+    // Handle Modals Close Action
     const handleClose = (modalName) => {
         const clonedOpen = {...open};
         clonedOpen[modalName] = false;
         setOpen(clonedOpen);
     };
-
+    // Handle Actions from child Components
     const handleAction = (action, id) => {
-        console.log(actions[action]);
-        console.log(action);
         actions[action](id);
     };
-
+    // Switch between detail Modal to Edit Modal
     const handleSwitch = () => {
         setOpen({
             'DoneTasks': false,
@@ -68,7 +67,7 @@ const TasksListContainer = () => {
             'TaskDetails': false,
         });
     };
-
+    // JSX Parts
     return (
         <Layout
             onBtnClick={() => handleOpen('DoneTasks')}

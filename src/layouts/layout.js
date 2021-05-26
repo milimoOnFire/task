@@ -1,8 +1,8 @@
 import {Button, Container, CssBaseline} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
-
-const useStyles = makeStyles((theme) => ({
+// Init Styles
+const useStyles = makeStyles(() => ({
     paper: {
         display: 'flex',
         flexDirection: 'column',
@@ -12,11 +12,14 @@ const useStyles = makeStyles((theme) => ({
     headBtn: {
         position: 'absolute',
         left: 0,
-        top: '1.37rem',
+        top: '.76rem',
     },
 }));
+// Layout Component
 const Layout = ({children,onBtnClick}) => {
+    // Get Classes
     const classes = useStyles();
+    // JSX Parts
     return (
         <Container
             component="main"

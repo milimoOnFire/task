@@ -8,7 +8,7 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
 import {addTask} from '../redux/tasks/actions';
-
+// Init Styles
 const useStyles = makeStyles((theme) => ({
     modal: {
         display: 'flex',
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
     },
 }));
+// Form validation schema
 const validationSchema = yup.object({
     title: yup
     .string('Enter Task Title')
@@ -33,10 +34,13 @@ const validationSchema = yup.object({
     .string('Enter Task Gifts')
     .required('Task Gifts is required'),
 });
+// Create Task component
 const CreateTaskModal = ({open, handleClose}) => {
+    // Get Styles
     const classes = useStyles();
+    // init Redux Dispatch
     const dispatch = useDispatch();
-
+    // init formik
     const formik = useFormik({
         initialValues: {
             title: '',

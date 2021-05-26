@@ -8,9 +8,8 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import * as yup from 'yup';
 import {updateTask} from '../redux/tasks/actions';
-
+// Init Styles
 const useStyles = makeStyles((theme) => {
-    console.log(theme);
     return ({
         modal: {
             display: 'flex',
@@ -30,6 +29,7 @@ const useStyles = makeStyles((theme) => {
         },
     });
 });
+// Form validation schema
 const validationSchema = yup.object({
     title: yup
     .string('Enter Task Title')
@@ -42,13 +42,16 @@ const validationSchema = yup.object({
     .string('Enter Task Gifts')
     .required('Task Gifts is required'),
 });
+// Edit Task component
 const EditTaskModal = ({taskId, open, handleClose}) => {
+    // Get Styles
     const classes = useStyles();
+    // init Redux Dispatch
     const dispatch = useDispatch();
+    // Select task with id
     const {tasks} = useSelector(state => state.tasksReducers);
     const [task, setTask] = useState();
-
-
+    // init formik
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
@@ -64,10 +67,10 @@ const EditTaskModal = ({taskId, open, handleClose}) => {
             ));
         },
     });
+    // fill form with task data
     useEffect(() => {
         if (!taskId) return;
         const task = tasks.find(task => task.id === Number(taskId));
-        console.log('taskId', taskId);
         if (!task) return;
         setTask(task);
         formik.setFieldValue('title', task.title);
@@ -75,7 +78,7 @@ const EditTaskModal = ({taskId, open, handleClose}) => {
         formik.setFieldValue('gifts', task.gifts);
         formik.setFieldValue('priority', task.priority);
     }, [taskId]);
-
+    // jsx parts
     return (
         <Modal
             aria-labelledby="transition-modal-title"
