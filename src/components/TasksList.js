@@ -1,47 +1,53 @@
 import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
+import {useDispatch} from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     btns: {
-        justifyContent: 'end',
+        justifyContent: 'flex-end',
     },
     btnSuccess: {
-        backgroundColor: 'green',
+        backgroundColor: theme.palette.success.main,
         color: 'white',
         '&:hover': {
-            backgroundColor: 'green',
-            boxShadow: '0 0 2px #775a40',
+            backgroundColor: theme.palette.success.dark,
+            boxShadow: theme.shadows[5],
         },
     },
     btnWarning: {
-        backgroundColor: 'orange',
+        backgroundColor: theme.palette.warning.main,
         color: 'white',
         '&:hover': {
-            backgroundColor: 'orange',
-            boxShadow: '0 0 2px #775a40',
+            backgroundColor: theme.palette.warning.dark,
+            boxShadow: theme.shadows[5],
         },
     },
     card: {
         marginTop: theme.spacing(1),
-        padding: theme.spacing(1),
-        width:'100%'
+        padding: theme.spacing(0),
+        width:'100%',
+        position:'relative'
     },
     status: {
         position:'absolute',
         top:theme.spacing(2.2),
         right:theme.spacing(2),
-        backgroundColor: 'orange',
+        backgroundColor: theme.palette.warning.main,
         width:'1.8rem',
         height:'1.8rem',
         borderRadius:'50%'
     }
 }));
-const TasksList = () => {
+const TasksList = ({handleAction}) => {
     const classes = useStyles();
+    const dispatch = useDispatch()
+    const handleDone = (id) => {
+
+    }
     return (
         <Card className={classes.card}>
-            <CardActionArea>
+            <CardActionArea onClick={() => handleAction('SHOW',12)}>
                 <CardContent>
                     <Typography
                         gutterBottom
@@ -60,7 +66,6 @@ const TasksList = () => {
                     </Typography>
                     <div className={classes.status}></div>
                 </CardContent>
-
             </CardActionArea>
             <CardActions className={classes.btns}>
                 <Button
@@ -68,6 +73,7 @@ const TasksList = () => {
                     variant="default"
                     color="default"
                     className={classes.btnWarning}
+                    onClick={() => handleAction('EDIT',1)}
                 >
                     Edit Task
                 </Button>
@@ -76,10 +82,12 @@ const TasksList = () => {
                     color="primary"
                     size="small"
                     className={classes.btnSuccess}
+                    onClick={() => handleDone(1)}
                 >
                     Done Task
                 </Button>
             </CardActions>
+
         </Card>
     );
 };

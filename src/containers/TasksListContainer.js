@@ -1,8 +1,11 @@
 import {Fab} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import React from 'react';
+import React, {useState} from 'react';
 import CreateTaskModal from '../components/CreateTaskModal';
+import DoneTasksModal from '../components/DoneTasksModal';
+import EditTaskModal from '../components/EditTaskModal';
+import TaskDetailsModal from '../components/TaskDetailsModal';
 import TasksList from '../components/TasksList';
 import Layout from '../layouts/layout';
 
@@ -15,27 +18,73 @@ const useStyles = makeStyles((theme) => ({
 }));
 const TasksListContainer = (props) => {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [taskId, setTaskId] = useState(null);
+    const [open, setOpen] = useState(
+        {
+            'DoneTasks': false,
+            'CreateTask': false,
+            'EditTask': false,
+            'TaskDetails': false,
+        },
+    );
 
-    const handleOpen = () => {
-        setOpen(true);
+    const actions = {
+        'SHOW': (id) => {
+            setTaskId(id);
+            handleOpen('TaskDetails');
+        },
+        'EDIT': (id) => {
+            setTaskId(id);
+            handleOpen('EditTask');
+        },
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleOpen = (modalName) => {
+        const clonedOpen = {...open};
+        clonedOpen[modalName] = true;
+        setOpen(clonedOpen);
     };
+
+    const handleClose = (modalName) => {
+        const clonedOpen = {...open};
+        clonedOpen[modalName] = false;
+        setOpen(clonedOpen);
+    };
+
+    const handleAction = (action, id) => {
+        console.log(actions[action])
+        console.log(action)
+        actions[action](id);
+    };
+
     return (
-        <Layout>
-            <CreateTaskModal
-                open={open}
-                handleClose={handleClose}
+        <Layout
+            onBtnClick={() => handleOpen('DoneTasks')}
+        >
+            <TasksList handleAction={handleAction} />
+            <DoneTasksModal
+                open={open['DoneTasks']}
+                handleClose={() => handleClose('DoneTasks')}
             />
-            <TasksList/>
+            <CreateTaskModal
+                open={open['CreateTask']}
+                handleClose={() => handleClose('CreateTask')}
+            />
+            <EditTaskModal
+                taskId={taskId}
+                open={open['EditTask']}
+                handleClose={() => handleClose('EditTask')}
+            />
+            <TaskDetailsModal
+                taskId={taskId}
+                open={open['TaskDetails']}
+                handleClose={() => handleClose('TaskDetails')}
+            />
             <Fab
                 color="primary"
                 aria-label="add"
                 className={classes.fab}
-                onClick={handleOpen}
+                onClick={() => handleOpen('CreateTask')}
             >
                 <AddIcon />
             </Fab>

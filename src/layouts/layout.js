@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         top: '1.37rem',
     },
 }));
-const Layout = ({children}) => {
+const Layout = ({children,onBtnClick}) => {
     const classes = useStyles();
     return (
         <Container
@@ -28,12 +28,13 @@ const Layout = ({children}) => {
             >
                 <header>
                     <h3>Hello World!</h3>
-                    <Button
+                    {onBtnClick?<Button
                         size="small"
                         variant="contained"
                         color="primary"
                         className={classes.headBtn}
-                    >View Done Tasks</Button>
+                        onClick={onBtnClick}
+                    >View Done Tasks</Button>:null}
                 </header>
                 {children}
             </div>
