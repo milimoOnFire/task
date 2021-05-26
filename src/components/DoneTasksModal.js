@@ -1,4 +1,6 @@
-import {Button, Card, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField} from '@material-ui/core';
+import {
+    Card, CardContent, Typography,
+} from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
@@ -7,25 +9,29 @@ import React from 'react';
 import TasksList from './TasksList';
 
 const useStyles = makeStyles((theme) => {
-    console.log(theme)
-    return({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-    buttonsContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: theme.spacing(1,0),
-        justifyContent:'space-around'
-    },
-})});
+    return ({
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+            width: '60vw',
+        },
+        buttonsContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            padding: theme.spacing(1, 0),
+            justifyContent: 'space-around',
+        },
+        content: {
+            textAlign: 'center',
+        },
+    });
+});
 const DoneTasksModal = ({open, handleClose}) => {
     const classes = useStyles();
     return (
@@ -43,7 +49,18 @@ const DoneTasksModal = ({open, handleClose}) => {
         >
             <Fade in={open}>
                 <Card className={classes.paper}>
-                    <TasksList handleAction={()=>{}} />
+                    <CardContent className={classes.content}>
+                        <Typography
+                            component="h6"
+                            variant="h6"
+                        >
+                            Done Tasks
+                        </Typography>
+                    </CardContent>
+                    <TasksList
+                        handleAction={() => {}}
+                        doneTasks={true}
+                    />
                 </Card>
             </Fade>
         </Modal>

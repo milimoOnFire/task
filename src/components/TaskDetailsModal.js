@@ -1,13 +1,5 @@
 import {
-    Button,
-    Card, CardContent,
-    CardHeader,
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    Radio,
-    RadioGroup,
-    TextField, Typography,
+    Button, Card, Typography,
 } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -16,6 +8,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteTask, updateTask} from '../redux/tasks/actions';
+import Status from './Status';
 
 const useStyles = makeStyles((theme) => {
     return ({
@@ -28,13 +21,18 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: theme.palette.background.paper,
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
+            width: '50vw',
         },
         buttonsContainer: {
             display: 'flex',
             flexDirection: 'row',
             padding: theme.spacing(1, 0),
-            justifyContent: 'space-around',
+            justifyContent: 'space-between',
         },
+        content:{
+            padding: theme.spacing(2, 0, 3),
+            position:'relative',
+        }
     });
 });
 const TaskDetailsModal = ({open,openEdit, handleClose,taskId}) => {
@@ -49,7 +47,7 @@ const TaskDetailsModal = ({open,openEdit, handleClose,taskId}) => {
         const task = tasks.find(task=>task.id === Number(taskId));
         if(!task) return
         setTask(task);
-    },[taskId])
+    },[taskId,open])
 
     const doneTask = () =>{
         dispatch(updateTask({...task,isDone:true},
@@ -77,14 +75,15 @@ const TaskDetailsModal = ({open,openEdit, handleClose,taskId}) => {
         >
             <Fade in={open}>
                 <Card className={classes.paper}>
-                    <CardContent className={classes.content}>
+                    <div className={classes.content}>
+                        <Status status={task.priority}/>
                         <Typography component="h5" variant="h5">
                             {task?.title}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
                             {task?.description}
                         </Typography>
-                    </CardContent>
+                    </div>
                     <div className={classes.buttonsContainer}>
                         <Button
                             variant="contained"

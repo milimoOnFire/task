@@ -4,6 +4,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateTask} from '../redux/tasks/actions';
 import {size} from '../utils/utils';
+import Status from './Status';
 
 const useStyles = makeStyles((theme) => ({
     btns: {
@@ -31,20 +32,16 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         position: 'relative',
     },
-    status: {
-        position: 'absolute',
-        top: theme.spacing(2.2),
-        right: theme.spacing(2),
-        backgroundColor: theme.palette.warning.main,
-        width: '1.8rem',
-        height: '1.8rem',
-        borderRadius: '50%',
-    },
 }));
-const TasksList = ({handleAction}) => {
+const TasksList = ({handleAction,doneTasks}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const {tasks} = useSelector(state => state.tasksReducers);
+    const filteredTasks = tasks.filter((task)=>{
+        if((doneTasks && task.isDone) || (!doneTasks && !task.isDone)){
+            return task
+        }
+    })
     const handleDone = (id) => {
         const task = tasks.find(task=>task.id === Number(id));
         dispatch(updateTask({...task,isDone:true},
@@ -52,7 +49,7 @@ const TasksList = ({handleAction}) => {
         ));
     };
     return (
-        size(tasks) > 0 && tasks.map((task) => (
+        size(filteredTasks) > 0 && filteredTasks.map((task) => (
             <Card className={classes.card}>
                 <CardActionArea onClick={() => handleAction('SHOW', task.id)}>
                     <CardContent>
@@ -70,10 +67,10 @@ const TasksList = ({handleAction}) => {
                         >
                             {task.description}
                         </Typography>
-                        <div className={classes.status}></div>
+                        <Status status={task.priority}/>
                     </CardContent>
                 </CardActionArea>
-                <CardActions className={classes.btns}>
+                {!doneTasks && <CardActions className={classes.btns}>
                     <Button
                         size="small"
                         variant="default"
@@ -92,8 +89,7 @@ const TasksList = ({handleAction}) => {
                     >
                         Done Task
                     </Button>
-                </CardActions>
-
+                </CardActions>}
             </Card>
         )));
 };

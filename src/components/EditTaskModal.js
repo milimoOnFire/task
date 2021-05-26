@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => {
         display: 'flex',
         flexDirection: 'row',
         padding: theme.spacing(1,0),
-        justifyContent:'space-around'
+        justifyContent:'space-between'
     },
 })});
 const validationSchema = yup.object({
