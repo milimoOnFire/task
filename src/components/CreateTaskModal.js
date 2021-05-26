@@ -3,7 +3,10 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
 import {makeStyles} from '@material-ui/core/styles';
+import {useFormik} from 'formik';
 import React from 'react';
+import * as yup from 'yup';
+
 const useStyles = makeStyles((theme) => ({
     modal: {
         display: 'flex',
@@ -16,9 +19,35 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
     },
 }));
-const CreateTaskModal = ({open,handleClose}) => {
+const validationSchema = yup.object({
+    title: yup
+    .string('Enter Task Title')
+    .required(' Task Title is required'),
+    description: yup
+    .string('Enter Task Description')
+    .min(8, 'Task Description should be of minimum 8 characters length')
+    .required('Task Description is required'),
+    gifts: yup
+    .string('Enter Task Gifts')
+    .required('Task Gifts is required'),
+});
+const CreateTaskModal = ({open, handleClose}) => {
     const classes = useStyles();
-    return(
+
+    const formik = useFormik({
+        initialValues: {
+            title: '',
+            description: '',
+            gifts: '',
+            priority: 'l',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log(values);
+        },
+    });
+
+    return (
         <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
@@ -36,27 +65,38 @@ const CreateTaskModal = ({open,handleClose}) => {
                     <form
                         className={classes.form}
                         noValidate
+                        onSubmit={formik.handleSubmit}
                     >
                         <TextField
                             variant="outlined"
                             margin="normal"
                             required
                             fullWidth
-                            name="taskTitle"
+                            name="title"
                             label="Task Title"
                             type="text"
                             id="taskTitle"
                             autoComplete="current-password"
+                            value={formik.values.title}
+                            onChange={formik.handleChange}
+                            error={formik.touched.title && Boolean(formik.errors.title)}
+                            helperText={formik.touched.title && formik.errors.title}
+
                         />
                         <TextField
                             id="outlined-multiline-static"
                             margin="normal"
-                            label="Task Description"
+                            label="description"
+                            name="description"
                             required
                             fullWidth
                             multiline
                             rows={4}
                             variant="outlined"
+                            value={formik.values.description}
+                            onChange={formik.handleChange}
+                            error={formik.touched.description && Boolean(formik.errors.description)}
+                            helperText={formik.touched.description && formik.errors.description}
                         />
                         <TextField
                             variant="outlined"
@@ -67,7 +107,10 @@ const CreateTaskModal = ({open,handleClose}) => {
                             label="Gifts and KPI for this task ;)"
                             type="text"
                             id="gifts"
-                            autoComplete="current-password"
+                            value={formik.values.gifts}
+                            onChange={formik.handleChange}
+                            error={formik.touched.gifts && Boolean(formik.errors.gifts)}
+                            helperText={formik.touched.gifts && formik.errors.gifts}
                         />
                         <FormControl
                             component="fieldset"
@@ -79,8 +122,10 @@ const CreateTaskModal = ({open,handleClose}) => {
                             <RadioGroup
                                 row
                                 aria-label="taskPriority"
-                                name="taskPriority"
-                                defaultValue="low"
+                                name="priority"
+                                defaultValue="l"
+                                value={formik.values.priority}
+                                onChange={formik.handleChange}
                             >
                                 <FormControlLabel
                                     value="l"
@@ -115,6 +160,6 @@ const CreateTaskModal = ({open,handleClose}) => {
             </Fade>
         </Modal>
     );
-}
+};
 
 export default CreateTaskModal;
