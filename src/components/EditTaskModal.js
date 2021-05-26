@@ -7,28 +7,29 @@ import {useFormik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import * as yup from 'yup';
-import {deleteTask, updateTask} from '../redux/tasks/actions';
+import {updateTask} from '../redux/tasks/actions';
 
 const useStyles = makeStyles((theme) => {
-    console.log(theme)
-    return({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-    buttonsContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: theme.spacing(1,0),
-        justifyContent:'space-between'
-    },
-})});
+    console.log(theme);
+    return ({
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+        },
+        buttonsContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            padding: theme.spacing(1, 0),
+            justifyContent: 'space-between',
+        },
+    });
+});
 const validationSchema = yup.object({
     title: yup
     .string('Enter Task Title')
@@ -41,50 +42,40 @@ const validationSchema = yup.object({
     .string('Enter Task Gifts')
     .required('Task Gifts is required'),
 });
-const EditTaskModal = ({taskId,open, handleClose}) => {
+const EditTaskModal = ({taskId, open, handleClose}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const {tasks} = useSelector(state => state.tasksReducers);
-    const [task,setTask] = useState();
+    const [task, setTask] = useState();
 
 
     const formik = useFormik({
-        enableReinitialize:true,
+        enableReinitialize: true,
         initialValues: {
             title: '',
             description: '',
             gifts: '',
             priority: '',
         },
-        validationSchema:validationSchema,
+        validationSchema: validationSchema,
         onSubmit: (values) => {
-            dispatch(updateTask({...task,...values},
-                () => {handleClose()},
+            dispatch(updateTask({...task, ...values},
+                () => {handleClose();},
             ));
         },
-    })
-    useEffect(()=>{
-        if(!taskId) return
-        const task = tasks.find(task=>task.id === Number(taskId));
-        console.log('taskId',taskId)
-        if(!task) return
+    });
+    useEffect(() => {
+        if (!taskId) return;
+        const task = tasks.find(task => task.id === Number(taskId));
+        console.log('taskId', taskId);
+        if (!task) return;
         setTask(task);
-        formik.setFieldValue('title',task.title)
-        formik.setFieldValue('description',task.description)
-        formik.setFieldValue('gifts',task.gifts)
-        formik.setFieldValue('priority',task.priority)
-    },[taskId])
+        formik.setFieldValue('title', task.title);
+        formik.setFieldValue('description', task.description);
+        formik.setFieldValue('gifts', task.gifts);
+        formik.setFieldValue('priority', task.priority);
+    }, [taskId]);
 
-    const doneTask = () =>{
-        dispatch(updateTask({...task,isDone:true},
-            () => {handleClose()},
-        ));
-    }
-    const deleteThis = () => {
-        dispatch(deleteTask(task.id,
-            () => {handleClose()},
-        ));
-    }
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -189,24 +180,9 @@ const EditTaskModal = ({taskId,open, handleClose}) => {
                                 color="primary"
                                 margin="normal"
                                 className={classes.btn}
+                                fullWidth
                             >
-                                Edit Tasks
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                onClick={doneTask}
-                            >
-                                Done Tasks
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                onClick={deleteThis}
-                            >
-                                Delete Task
+                                Edit Task
                             </Button>
                         </div>
                     </form>
