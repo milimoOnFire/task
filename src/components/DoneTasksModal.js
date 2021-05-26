@@ -4,6 +4,7 @@ import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
+import TasksList from './TasksList';
 
 const useStyles = makeStyles((theme) => {
     console.log(theme)
@@ -42,105 +43,7 @@ const DoneTasksModal = ({open, handleClose}) => {
         >
             <Fade in={open}>
                 <Card className={classes.paper}>
-                    <form
-                        className={classes.form}
-                        noValidate
-                    >
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="taskTitle"
-                            label="Task Title"
-                            type="text"
-                            id="taskTitle"
-                            autoComplete="current-password"
-                        />
-                        <TextField
-                            id="outlined-multiline-static"
-                            margin="normal"
-                            label="Task Description"
-                            required
-                            fullWidth
-                            multiline
-                            rows={4}
-                            variant="outlined"
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="gifts"
-                            label="Gifts and KPI for this task ;)"
-                            type="text"
-                            id="gifts"
-                            autoComplete="current-password"
-                        />
-                        <FormControl
-                            component="fieldset"
-                            margin="normal"
-                        >
-                            <FormLabel component="legend">
-                                Task Priority
-                            </FormLabel>
-                            <RadioGroup
-                                row
-                                aria-label="taskPriority"
-                                name="taskPriority"
-                                defaultValue="low"
-                            >
-                                <FormControlLabel
-                                    value="l"
-                                    control={<Radio color="primary" />}
-                                    label="Low"
-                                />
-                                <FormControlLabel
-                                    value="m"
-                                    control={<Radio color="primary" />}
-                                    label="Medium"
-
-                                />
-                                <FormControlLabel
-                                    value="h"
-                                    control={<Radio color="primary" />}
-                                    label="High"
-
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                type="submit"
-
-                                variant="contained"
-                                color="primary"
-                                margin="normal"
-                                className={classes.btn}
-                            >
-                                Edit Tasks
-                            </Button>
-                            <Button
-                                type="submit"
-
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Done Tasks
-                            </Button>
-                            <Button
-                                type="submit"
-
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Delete Task
-                            </Button>
-                        </div>
-                    </form>
+                    <TasksList handleAction={()=>{}} />
                 </Card>
             </Fade>
         </Modal>

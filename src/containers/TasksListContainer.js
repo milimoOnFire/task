@@ -55,9 +55,18 @@ const TasksListContainer = () => {
     };
 
     const handleAction = (action, id) => {
-        console.log(actions[action])
-        console.log(action)
+        console.log(actions[action]);
+        console.log(action);
         actions[action](id);
+    };
+
+    const handleSwitch = () => {
+        setOpen({
+            'DoneTasks': false,
+            'CreateTask': false,
+            'EditTask': true,
+            'TaskDetails': false,
+        });
     };
 
     return (
@@ -79,6 +88,7 @@ const TasksListContainer = () => {
                 handleClose={() => handleClose('EditTask')}
             />
             <TaskDetailsModal
+                openEdit={handleSwitch}
                 taskId={taskId}
                 open={open['TaskDetails']}
                 handleClose={() => handleClose('TaskDetails')}

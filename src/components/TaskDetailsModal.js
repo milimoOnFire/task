@@ -1,31 +1,67 @@
-import {Button, Card, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField} from '@material-ui/core';
+import {
+    Button,
+    Card, CardContent,
+    CardHeader,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Radio,
+    RadioGroup,
+    TextField, Typography,
+} from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteTask, updateTask} from '../redux/tasks/actions';
 
 const useStyles = makeStyles((theme) => {
-    return({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-    buttonsContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: theme.spacing(1,0),
-        justifyContent:'space-around'
-    },
-})});
-const TaskDetailsModal = ({open, handleClose}) => {
+    return ({
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+        },
+        buttonsContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            padding: theme.spacing(1, 0),
+            justifyContent: 'space-around',
+        },
+    });
+});
+const TaskDetailsModal = ({open,openEdit, handleClose,taskId}) => {
     const classes = useStyles();
+    const {tasks} = useSelector(state => state.tasksReducers);
+    const [task,setTask] = useState();
+
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        if(!taskId) return
+        const task = tasks.find(task=>task.id === Number(taskId));
+        if(!task) return
+        setTask(task);
+    },[taskId])
+
+    const doneTask = () =>{
+        dispatch(updateTask({...task,isDone:true},
+            () => {handleClose()},
+        ));
+    }
+    const deleteThis = () => {
+        dispatch(deleteTask(task.id,
+            () => {handleClose()},
+        ));
+    }
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -41,109 +77,46 @@ const TaskDetailsModal = ({open, handleClose}) => {
         >
             <Fade in={open}>
                 <Card className={classes.paper}>
-                    <form
-                        className={classes.form}
-                        noValidate
-                    >
-                        <TextField
-                            variant="outlined"
+                    <CardContent className={classes.content}>
+                        <Typography component="h5" variant="h5">
+                            {task?.title}
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                            {task?.description}
+                        </Typography>
+                    </CardContent>
+                    <div className={classes.buttonsContainer}>
+                        <Button
+                            variant="contained"
+                            color="primary"
                             margin="normal"
-                            required
-                            fullWidth
-                            name="taskTitle"
-                            label="Task Title"
-                            type="text"
-                            id="taskTitle"
-                            autoComplete="current-password"
-                        />
-                        <TextField
-                            id="outlined-multiline-static"
-                            margin="normal"
-                            label="Task Description"
-                            required
-                            fullWidth
-                            multiline
-                            rows={4}
-                            variant="outlined"
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="gifts"
-                            label="Gifts and KPI for this task ;)"
-                            type="text"
-                            id="gifts"
-                            autoComplete="current-password"
-                        />
-                        <FormControl
-                            component="fieldset"
-                            margin="normal"
+                            className={classes.btn}
+                            onClick={openEdit}
                         >
-                            <FormLabel component="legend">
-                                Task Priority
-                            </FormLabel>
-                            <RadioGroup
-                                row
-                                aria-label="taskPriority"
-                                name="taskPriority"
-                                defaultValue="low"
-                            >
-                                <FormControlLabel
-                                    value="l"
-                                    control={<Radio color="primary" />}
-                                    label="Low"
-                                />
-                                <FormControlLabel
-                                    value="m"
-                                    control={<Radio color="primary" />}
-                                    label="Medium"
+                            Edit Tasks
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={doneTask}
+                        >
+                            Done Tasks
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={deleteThis}
+                        >
+                            Delete Task
+                        </Button>
+                    </div>
 
-                                />
-                                <FormControlLabel
-                                    value="h"
-                                    control={<Radio color="primary" />}
-                                    label="High"
-
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                type="submit"
-
-                                variant="contained"
-                                color="primary"
-                                margin="normal"
-                                className={classes.btn}
-                            >
-                                Edit Tasks
-                            </Button>
-                            <Button
-                                type="submit"
-
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Done Tasks
-                            </Button>
-                            <Button
-                                type="submit"
-
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Delete Task
-                            </Button>
-                        </div>
-                    </form>
-                </Card>
-            </Fade>
-        </Modal>
-    );
+            </Card>
+        </Fade>
+</Modal>
+);
 };
 
 export default TaskDetailsModal;
